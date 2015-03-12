@@ -27,8 +27,20 @@ class NewVisitorTest(unittest.TestCase):
 			inputbox.get_attribute('placeholder'),
 			'Enter a to-do item'
 		)
+		
+		#She types "Buy peacock feather" into a text box ('Edith's hobby
+		# is tying fly fishing lures)
 		inputbox.send_keys('Buy peacock feather')
+		
+		# When she hits enter, the page updates, and now the pages lists
+		# "1: Buy Peacock Feathers" as an item in a to-do list table
 		inputbox.send_keys(Keys.ENTER)
+		
+		table = self.browser.find_element_by_id('id_list_table')
+		rows = table.find_elements_by_tag_name('tr')
+		self.assertTrue(
+			any(row.text == '1: Buy peacock feathers' for row in rows)
+		)
 		
 		self.fail('Finish the test!')
 			
