@@ -5,7 +5,7 @@ import unittest
 
 
 class NewVisitorTest(LiveServerTestCase):
-
+        
         def setUp(self):
                 self.browser = webdriver.Firefox()
                 self.browser.implicitly_wait(3)
@@ -13,6 +13,25 @@ class NewVisitorTest(LiveServerTestCase):
         def tearDown(self):
                 self.browser.quit()
 
+        def test_layout_and_styling(self):
+                self.browser.get(self.live_server_url)
+                self.browser.set_window_size(1024, 768)
+
+                inputbox = self.browser.find_element_by_id('id_new_item')
+                self.assertAlmostEqual(
+                        inputbox.location['x'] + inputbox.size['width'] / 2,
+                        512,
+                        delta=5
+                )
+
+                inputbox.send_keys('testing\n')
+                inputbox = self.browser.find_element_by_id('id_new_item')
+                self.assertAlmostEqual(
+                        inputbox.location['x'] + inputbox.size['width'] / 2,
+                        512,
+                        delta=5
+                )
+        
         def check_for_row_in_list_table(self, row_text):
                 table = self.browser.find_element_by_id('id_list_table')
                 rows = table.find_elements_by_tag_name('tr')
